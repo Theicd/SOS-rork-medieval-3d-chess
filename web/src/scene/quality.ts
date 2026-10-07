@@ -1,6 +1,6 @@
 /** Graphics presets. Each one genuinely changes cost, not just a label. */
 
-export type QualityPreset = "low" | "medium" | "high" | "ultra";
+export type QualityPreset = "lite" | "low" | "medium" | "high" | "ultra";
 
 export interface QualitySettings {
   postFx: boolean;
@@ -37,6 +37,30 @@ export interface QualitySettings {
 }
 
 export const QUALITY_SETTINGS: Record<QualityPreset, QualitySettings> = {
+  /** Below Low — half-res pixels, strip remaining soft costs for weak GPUs. */
+  lite: {
+    postFx: false,
+    bloom: false,
+    ssao: false,
+    dof: false,
+    grade: false,
+    smaa: false,
+    msaaSamples: 0,
+    shadows: false,
+    shadowMapSize: 256,
+    contactShadows: false,
+    lightShafts: false,
+    dustCount: 0,
+    emberCount: 0,
+    maxPixelRatio: 0.75,
+    captureParticles: 0,
+    characterAnimations: false,
+    troopCount: 0,
+    campfires: 0,
+    ashCount: 0,
+    smokeCount: 0,
+    battleProps: false,
+  },
   low: {
     postFx: false,
     bloom: false,
@@ -131,7 +155,7 @@ export const QUALITY_SETTINGS: Record<QualityPreset, QualitySettings> = {
   },
 };
 
-export const QUALITY_ORDER: QualityPreset[] = ["low", "medium", "high", "ultra"];
+export const QUALITY_ORDER: QualityPreset[] = ["lite", "low", "medium", "high", "ultra"];
 
 /**
  * First-run guess from the GPU string, core count and memory. The engine then
@@ -155,10 +179,15 @@ export function detectQualityPreset(): QualityPreset {
     renderer = "";
   }
 
-  const weakGpu = /(swiftshader|llvmpipe|software|mali-4|adreno \(tm\) [345]|intel.*hd graphics [2-4])/.test(renderer);
+  const veryWeakGpu =
+    /(swiftshader|llvmpipe|software|mali-4|adreno \(tm\) [23]|powervr|intel.*hd graphics [2-3])/.test(
+      renderer,
+    );
+  const weakGpu = /(mali-4|adreno \(tm\) [345]|intel.*hd graphics [2-4])/.test(renderer);
   const strongGpu = /(rtx|radeon rx|apple m[1-9]|geforce gtx 1[06-9]|arc a)/.test(renderer);
 
-  if (weakGpu || cores <= 2 || memory <= 2) return "low";
+  if (veryWeakGpu || cores <= 2 || memory <= 1.5) return "lite";
+  if (weakGpu || memory <= 2) return "low";
   if (isTouch) return cores >= 8 && memory >= 6 ? "medium" : "low";
   if (strongGpu && cores >= 8 && memory >= 8) return "ultra";
   if (cores >= 6 && memory >= 4) return "high";

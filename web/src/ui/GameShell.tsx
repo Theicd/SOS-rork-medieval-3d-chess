@@ -4,7 +4,7 @@ import { audio } from "../audio/audioManager";
 import { GameController } from "../core/gameController";
 import type { LedgerMove } from "../core/types";
 import { Clapperboard } from "lucide-react";
-import { ARENA_LOOKS, DEFAULT_ARENA, type ArenaTheme } from "../scene/arena";
+import { ARENA_LOOKS, ARENA_ORDER, DEFAULT_ARENA, type ArenaTheme } from "../scene/arena";
 import { DEFAULT_ERA, ERAS, type EraId } from "../scene/eras";
 import { detectQualityPreset, type QualityPreset } from "../scene/quality";
 import { readReviewState } from "../scene/reviewState";
@@ -102,6 +102,8 @@ export function GameShell() {
   const [searching, setSearching] = useState(false);
   const [menuStatus, setMenuStatus] = useState<string | null>(null);
   const [challenge, setChallenge] = useState<{ name: string } | null>(null);
+  const [installOpen, setInstallOpen] = useState(false);
+  const [showInstall, setShowInstall] = useState(true);
 
   // ------------------------------------------------------------ boot the scene
   useEffect(() => {
@@ -222,6 +224,23 @@ export function GameShell() {
     engine.setRankBadges(settings.rankBadges);
     audio.setMuted(settings.muted);
   }, [settings, qualityPinned]);
+
+  // Rotate battleground atmosphere each time the home screen is entered.
+  // Explicit ?arena= review pins win; otherwise cycle through ARENA_ORDER.
+  useEffect(() => {
+    if (phase !== "menu" || review.arena) return;
+    let nextIndex = 0;
+    try {
+      const raw = sessionStorage.getItem("kg-arena-rot");
+      nextIndex = Number.parseInt(raw ?? "0", 10);
+      if (!Number.isFinite(nextIndex) || nextIndex < 0) nextIndex = 0;
+      sessionStorage.setItem("kg-arena-rot", String(nextIndex + 1));
+    } catch {
+      nextIndex = Math.floor(Math.random() * ARENA_ORDER.length);
+    }
+    const theme = ARENA_ORDER[nextIndex % ARENA_ORDER.length];
+    setSettings((current) => (current.arena === theme ? current : { ...current, arena: theme }));
+  }, [phase, review.arena]);
 
   // ------------------------------------------------ manual graphics choice
   /**
@@ -649,6 +668,8 @@ export function GameShell() {
           <MainMenu
             onPlay={handleQuickPlay}
             onOpenSettings={() => setShowSettings(true)}
+            onOpenInstall={() => setInstallOpen(true)}
+            showInstall={showInstall && !showSettings}
             attract={attract}
             onInteract={stopAttract}
             searching={searching}
@@ -656,7 +677,11 @@ export function GameShell() {
           />
         ) : null}
 
-        <InstallPrompt visible={phase === "menu" && !introPlaying && !showSettings} />
+        <InstallPrompt
+          open={installOpen && phase === "menu" && !introPlaying}
+          onClose={() => setInstallOpen(false)}
+          onInstalledChange={(installed) => setShowInstall(!installed)}
+        />
 
         {challenge ? (
           <div className="pointer-events-auto absolute inset-0 z-40 flex items-center justify-center bg-black/55 px-5">

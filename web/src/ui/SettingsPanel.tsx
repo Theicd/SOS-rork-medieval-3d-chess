@@ -1,4 +1,5 @@
-import { Clapperboard, Globe, Users, X } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Clapperboard, Globe, Users, X } from "lucide-react";
 
 import type { Difficulty } from "../core/types";
 import { ARENA_LOOKS, ARENA_ORDER, type ArenaTheme } from "../scene/arena";
@@ -39,6 +40,11 @@ interface SettingsPanelProps {
 }
 
 const PRESETS: { key: QualityPreset; label: string; note: string }[] = [
+  {
+    key: "lite",
+    label: "Lite",
+    note: "Half-res render, no contact shadows, no troops or smoke — for weak phones",
+  },
   { key: "low", label: "Low", note: "No post-processing, no shadows — runs anywhere" },
   { key: "medium", label: "Medium", note: "Bloom, shadows, light shafts, some dust" },
   { key: "high", label: "High", note: "Adds depth of field, grade, 2K shadows" },
@@ -58,6 +64,8 @@ export function SettingsPanel({
   onShowcase,
   onOnlineLobby,
 }: SettingsPanelProps) {
+  const [atmosphereOpen, setAtmosphereOpen] = useState(false);
+
   return (
     <div className="pointer-events-auto absolute inset-0 z-20 flex flex-col items-center justify-center overflow-hidden bg-black/60 px-5 py-6 backdrop-blur-sm">
       <div className="mc-slate mc-goldleaf mc-rise flex max-h-full w-full min-h-0 max-w-lg flex-col p-5 sm:p-6">
@@ -69,64 +77,13 @@ export function SettingsPanel({
         </div>
 
         <div className="mc-scroll mc-scroll-shade -mr-2 min-h-0 flex-auto overflow-y-auto pb-1 pr-2">
-        <p className="mc-display mb-2 text-[0.6rem] tracking-[0.3em] text-[#a89268]">Era</p>
-        <div className="grid grid-cols-2 gap-2">
-          {ERA_ORDER.map((era) => (
-            <button
-              key={era}
-              type="button"
-              className="mc-arena-card"
-              data-active={settings.era === era}
-              title={ERAS[era].note}
-              onClick={() =>
-                onChange({
-                  ...settings,
-                  era,
-                  // Each era carries its own battleground, so switching period
-                  // restages the map too instead of stranding legionaries in
-                  // the rainforest.
-                  arena: ERAS[era].arena,
-                })
-              }
-            >
-              <span className="mc-arena-swatch" data-arena={ERAS[era].arena} />
-              <span className="mc-display text-[0.68rem] leading-tight text-[#f0e0be]">{ERAS[era].label}</span>
-              <span className="text-[0.6rem] leading-tight text-[#9c8b6c]">{ERAS[era].period}</span>
-            </button>
-          ))}
-        </div>
-        <p className="mt-2 text-xs italic text-[#9c8b6c]">
-          {ERAS[settings.era].armies.w} vs {ERAS[settings.era].armies.b}
-        </p>
-
-        <div className="mc-rule my-5" />
-
-        <p className="mc-display mb-2 text-[0.6rem] tracking-[0.3em] text-[#a89268]">Battleground</p>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {ARENA_ORDER.map((theme) => (
-            <button
-              key={theme}
-              type="button"
-              className="mc-arena-card"
-              data-active={settings.arena === theme}
-              onClick={() => onChange({ ...settings, arena: theme })}
-            >
-              <span className="mc-arena-swatch" data-arena={theme} />
-              <span className="mc-display text-[0.68rem] leading-tight text-[#f0e0be]">{ARENA_LOOKS[theme].label}</span>
-            </button>
-          ))}
-        </div>
-        <p className="mt-2 text-xs italic text-[#9c8b6c]">{ARENA_LOOKS[settings.arena].note}</p>
-
-        <div className="mc-rule my-5" />
-
         <p className="mc-display mb-2 text-[0.6rem] tracking-[0.3em] text-[#a89268]">Graphics</p>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
           {PRESETS.map((preset) => (
             <button
               key={preset.key}
               type="button"
-              className="mc-chip py-2.5"
+              className="mc-chip px-1 py-2.5 text-[0.62rem] sm:text-[0.72rem]"
               data-active={settings.quality === preset.key}
               onClick={() => onPickQuality(preset.key)}
             >
@@ -158,6 +115,84 @@ export function SettingsPanel({
             preset yourself turns that off.
           </p>
         )}
+
+        <div className="mc-rule my-5" />
+
+        <button
+          type="button"
+          className="mc-settings-fold"
+          aria-expanded={atmosphereOpen}
+          onClick={() => setAtmosphereOpen((v) => !v)}
+        >
+          <span>
+            <span className="mc-display block text-[0.6rem] tracking-[0.3em] text-[#a89268]">
+              Era &amp; battleground
+            </span>
+            <span className="mt-0.5 block text-xs italic text-[#9c8b6c]">
+              {ERAS[settings.era].label} · {ARENA_LOOKS[settings.arena].label}
+            </span>
+          </span>
+          <ChevronDown
+            size={18}
+            className={`shrink-0 text-[#c8ab74] transition-transform duration-200 ${
+              atmosphereOpen ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        {atmosphereOpen ? (
+          <div className="mt-3">
+            <p className="mc-display mb-2 text-[0.55rem] tracking-[0.28em] text-[#7d6f57]">Era</p>
+            <div className="grid grid-cols-2 gap-2">
+              {ERA_ORDER.map((era) => (
+                <button
+                  key={era}
+                  type="button"
+                  className="mc-arena-card"
+                  data-active={settings.era === era}
+                  title={ERAS[era].note}
+                  onClick={() =>
+                    onChange({
+                      ...settings,
+                      era,
+                      arena: ERAS[era].arena,
+                    })
+                  }
+                >
+                  <span className="mc-arena-swatch" data-arena={ERAS[era].arena} />
+                  <span className="mc-display text-[0.68rem] leading-tight text-[#f0e0be]">
+                    {ERAS[era].label}
+                  </span>
+                  <span className="text-[0.6rem] leading-tight text-[#9c8b6c]">{ERAS[era].period}</span>
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs italic text-[#9c8b6c]">
+              {ERAS[settings.era].armies.w} vs {ERAS[settings.era].armies.b}
+            </p>
+
+            <p className="mc-display mb-2 mt-4 text-[0.55rem] tracking-[0.28em] text-[#7d6f57]">
+              Battleground
+            </p>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {ARENA_ORDER.map((theme) => (
+                <button
+                  key={theme}
+                  type="button"
+                  className="mc-arena-card"
+                  data-active={settings.arena === theme}
+                  onClick={() => onChange({ ...settings, arena: theme })}
+                >
+                  <span className="mc-arena-swatch" data-arena={theme} />
+                  <span className="mc-display text-[0.68rem] leading-tight text-[#f0e0be]">
+                    {ARENA_LOOKS[theme].label}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs italic text-[#9c8b6c]">{ARENA_LOOKS[settings.arena].note}</p>
+          </div>
+        ) : null}
 
         <div className="mc-rule my-5" />
 

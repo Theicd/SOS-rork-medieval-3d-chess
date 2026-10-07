@@ -14,7 +14,7 @@ import { CastleHall, buildEnvironmentMap, disposeEnvironment } from "./environme
 import { EffectsSystem, ShakeSystem } from "./effects";
 import { FACTION_ACCENT, PieceFactory, PieceView, type ClipName, type TemplateKey } from "./pieces";
 import { PostFX } from "./postfx";
-import { QUALITY_SETTINGS, type QualityPreset } from "./quality";
+import { QUALITY_ORDER, QUALITY_SETTINGS, type QualityPreset } from "./quality";
 import { disposeSurfaces } from "./detail";
 import { readReviewState } from "./reviewState";
 import { SPELL_LOOK, SpellLightPool, SpellOrb } from "./spells";
@@ -1338,8 +1338,7 @@ export class SceneEngine {
     // Rate-limit rather than fire once: one step is often not enough to reach
     // budget, but stepping every frame would thrash the program cache.
     if (this.elapsed - this.lastQualityStepAt < 6) return;
-    const order: QualityPreset[] = ["low", "medium", "high", "ultra"];
-    const index = order.indexOf(this.preset);
+    const index = QUALITY_ORDER.indexOf(this.preset);
     if (index <= 0) {
       this.autoAdjusted = true;
       return;
@@ -1349,7 +1348,7 @@ export class SceneEngine {
     // Frame history describes the preset we are leaving, so discard it or the
     // next window immediately re-triggers on stale samples.
     this.fpsSamples = [];
-    const next = order[index - 1];
+    const next = QUALITY_ORDER[index - 1];
     this.setQuality(next);
     this.callbacks.onQualityAdjusted(next);
   }

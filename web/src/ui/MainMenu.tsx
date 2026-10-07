@@ -1,4 +1,4 @@
-import { Crown, Loader2, Settings as SettingsIcon } from "lucide-react";
+import { Crown, Download, Loader2, Settings as SettingsIcon } from "lucide-react";
 
 const ORIGINAL_REPO = "https://github.com/ade5791/rork-medieval-3d-chess";
 
@@ -6,6 +6,10 @@ interface MainMenuProps {
   /** One-tap play: matchmake, else AI, keep hall open for a challenger. */
   onPlay: () => void;
   onOpenSettings: () => void;
+  /** Opens the install confirmation dialog (download icon). */
+  onOpenInstall?: () => void;
+  /** Hide the download icon once the PWA is installed. */
+  showInstall?: boolean;
   attract: boolean;
   onInteract: () => void;
   /** True while searching for / joining a hall. */
@@ -17,6 +21,8 @@ interface MainMenuProps {
 export function MainMenu({
   onPlay,
   onOpenSettings,
+  onOpenInstall,
+  showInstall = false,
   attract,
   onInteract,
   searching = false,
@@ -30,9 +36,24 @@ export function MainMenu({
     >
       <div className="mc-topbar">
         <div className="mc-topbar-spacer" />
+        {showInstall && onOpenInstall ? (
+          <button
+            type="button"
+            className="mc-round-icon"
+            title="Install game"
+            aria-label="Install game"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenInstall();
+            }}
+          >
+            <Download size={22} strokeWidth={2.2} />
+          </button>
+        ) : null}
         <button
           type="button"
-          className="mc-gear"
+          className="mc-round-icon mc-gear"
           title="Settings"
           aria-label="Settings"
           onPointerDown={(e) => e.stopPropagation()}
