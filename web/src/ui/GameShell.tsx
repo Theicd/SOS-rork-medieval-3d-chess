@@ -11,6 +11,7 @@ import { readReviewState } from "../scene/reviewState";
 import { SceneEngine, type CameraPreset } from "../scene/sceneEngine";
 import { GameOverModal } from "./GameOverModal";
 import { Hud } from "./Hud";
+import { InstallPrompt } from "./InstallPrompt";
 import { MainMenu, type MatchConfig } from "./MainMenu";
 import { OnlineBridge } from "../net/onlineBridge";
 import type { ConnectionStatus } from "../net/onlineClient";
@@ -101,6 +102,8 @@ export function GameShell() {
   const [searching, setSearching] = useState(false);
   const [menuStatus, setMenuStatus] = useState<string | null>(null);
   const [challenge, setChallenge] = useState<{ name: string } | null>(null);
+  const [canInstall, setCanInstall] = useState(false);
+  const [installOpenSignal, setInstallOpenSignal] = useState(0);
 
   // ------------------------------------------------------------ boot the scene
   useEffect(() => {
@@ -648,12 +651,20 @@ export function GameShell() {
           <MainMenu
             onPlay={handleQuickPlay}
             onOpenSettings={() => setShowSettings(true)}
+            onInstall={() => setInstallOpenSignal((n) => n + 1)}
+            canInstall={canInstall}
             attract={attract}
             onInteract={stopAttract}
             searching={searching}
             status={menuStatus}
           />
         ) : null}
+
+        <InstallPrompt
+          visible={phase === "menu" && !introPlaying && !showSettings}
+          onAvailabilityChange={setCanInstall}
+          openSignal={installOpenSignal}
+        />
 
         {challenge ? (
           <div className="pointer-events-auto absolute inset-0 z-40 flex items-center justify-center bg-black/55 px-5">

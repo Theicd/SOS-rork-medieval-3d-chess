@@ -1097,6 +1097,195 @@
 /* S5 reduced-motion contract.                                           */
 /*                                                                       */
 /* Entrance animations collapse to 1ms rather than `none` so their        */
+/* ------------------------------------------------ Kart-style home chrome */
+
+.mc-topbar {
+  position: absolute;
+  z-index: 5;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: calc(14px + env(safe-area-inset-left, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.mc-topbar-spacer {
+  flex: 1;
+  min-width: 0;
+}
+
+.mc-gear {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #f0dfb6;
+  background: rgba(16, 18, 24, 0.62);
+  border: 1px solid rgba(216, 177, 99, 0.4);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s ease, background 0.2s ease;
+}
+
+.mc-gear:hover {
+  background: rgba(40, 34, 22, 0.85);
+  transform: rotate(45deg);
+}
+
+.mc-gear:active {
+  transform: rotate(90deg) scale(0.94);
+}
+
+.mc-install-card {
+  position: fixed;
+  z-index: 120;
+  right: calc(env(safe-area-inset-right, 0px) + 14px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(216, 177, 99, 0.55);
+  background: linear-gradient(180deg, rgba(40, 30, 20, 0.92), rgba(12, 10, 8, 0.92));
+  color: #f4e3bd;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 0 18px rgba(216, 177, 99, 0.2);
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  animation: mc-inst-in 0.45s ease both;
+}
+
+.mc-install-card.gone {
+  animation: mc-inst-out 0.5s ease both;
+  pointer-events: none;
+}
+
+.mc-install-card img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.mc-install-card small {
+  display: block;
+  font-family: "Crimson Pro", Georgia, serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(245, 230, 190, 0.75);
+  margin-top: 4px;
+}
+
+.mc-install-card:active {
+  transform: scale(0.97);
+}
+
+.mc-install-dlg {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(4, 6, 14, 0.66);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+
+.mc-install-dlg-card {
+  width: min(420px, 100%);
+  padding: 22px 22px 18px;
+  text-align: center;
+  color: #f4efe4;
+  animation: mc-inst-in 0.3s ease both;
+}
+
+.mc-install-dlg-card img {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  margin: 0 auto;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+.mc-install-dlg-card h3 {
+  margin: 12px 0 6px;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f0dfb6;
+}
+
+.mc-install-dlg-card p {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  color: rgba(244, 239, 228, 0.85);
+}
+
+.mc-install-dlg-card ul {
+  margin: 8px 0 16px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(255, 230, 190, 0.75);
+}
+
+.mc-install-dlg-card li {
+  margin: 3px 0;
+}
+
+.mc-install-dlg-card b {
+  color: #f0dfb6;
+  font-style: normal;
+}
+
+.mc-install-dlg-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.mc-install-dlg-row .mc-btn {
+  flex: 1;
+  min-height: 46px;
+}
+
+@keyframes mc-inst-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mc-inst-out {
+  to {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
 /* fill-mode:both end state still applies - `animation:none` would leave  */
 /* those elements stuck at opacity 0. Infinite decorative loops are       */
 /* cancelled outright. Colour/border/shadow are never touched, so every   */

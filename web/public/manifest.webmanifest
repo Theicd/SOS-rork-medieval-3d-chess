@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "King's Gambit",
+  "short_name": "King's Gambit",
+  "description": "Medieval 3D chess — one tap to play online or against the computer.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "fullscreen"],
+  "orientation": "any",
+  "background_color": "#05060a",
+  "theme_color": "#05060a",
+  "categories": ["games"],
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }
+  ]
+}
