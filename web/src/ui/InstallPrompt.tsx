@@ -158,8 +158,8 @@ export function InstallPrompt({ visible, onAvailabilityChange, openSignal = 0 }:
             <p>Add the game to your device and open it straight from the home screen.</p>
             <ul>
               <li>Full screen, no browser bars</li>
-              <li>Opens faster next time</li>
-              <li>One tap from your home screen</li>
+              <li>After one online load, reopens from device cache</li>
+              <li>Playable offline once the hall has finished loading once</li>
             </ul>
             {deferred ? (
               <>
