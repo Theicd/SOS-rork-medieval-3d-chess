@@ -1234,18 +1234,20 @@
   transform: scale(1.05);
 }
 
-/* Left install bookmark */
+/* Left install bookmark — slim strip under the top safe area, never over the title */
 .mc-install-drawer {
-  --tab: 40px;
+  --tab: 34px;
+  --bar-h: 40px;
   position: fixed;
   z-index: 50;
   left: 0;
-  top: calc(72px + env(safe-area-inset-top, 0px));
+  top: calc(10px + env(safe-area-inset-top, 0px));
+  height: var(--bar-h);
   display: flex;
   flex-direction: row-reverse;
   align-items: stretch;
   transform: translateX(calc(-100% + var(--tab)));
-  transition: transform 0.55s cubic-bezier(0.2, 1.15, 0.3, 1);
+  transition: transform 0.45s cubic-bezier(0.2, 1.1, 0.3, 1);
   pointer-events: auto;
 }
 
@@ -1255,18 +1257,22 @@
 
 .mc-install-tab {
   width: var(--tab);
-  padding: 14px 0;
+  height: var(--bar-h);
+  padding: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  border: 1px solid rgba(216, 177, 99, 0.55);
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid rgba(216, 177, 99, 0.5);
   border-left: 0;
-  border-radius: 0 12px 12px 0;
-  background: linear-gradient(180deg, rgba(48, 36, 22, 0.9), rgba(16, 12, 8, 0.94));
+  border-radius: 0 10px 10px 0;
+  background: rgba(18, 14, 10, 0.72);
   color: #f0dfb6;
-  box-shadow: 4px 0 14px rgba(0, 0, 0, 0.4);
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -1280,75 +1286,82 @@
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   font-family: "Cinzel", Georgia, serif;
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  line-height: 1;
 }
 
 .mc-install-panel {
-  position: relative;
-  width: min(210px, 62vw);
-  padding: 16px 14px 14px;
+  height: var(--bar-h);
+  width: auto;
+  max-width: min(200px, 58vw);
+  padding: 0 6px 0 8px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   gap: 6px;
-  border: 1px solid rgba(216, 177, 99, 0.55);
+  border: 1px solid rgba(216, 177, 99, 0.5);
   border-right: 0;
-  border-radius: 0 16px 16px 0;
-  background: linear-gradient(160deg, rgba(36, 28, 18, 0.92), rgba(12, 10, 8, 0.94));
-  box-shadow: 6px 0 24px rgba(0, 0, 0, 0.5);
+  border-radius: 0 12px 12px 0;
+  background: rgba(16, 12, 8, 0.78);
+  box-shadow: 4px 0 14px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 .mc-install-panel img {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  flex: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .mc-install-title {
-  margin-top: 4px;
-  font-size: 0.85rem;
-  letter-spacing: 0.16em;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #f0dfb6;
-}
-
-.mc-install-sub {
-  margin: 0;
-  font-size: 0.75rem;
-  font-style: italic;
-  line-height: 1.35;
-  color: rgba(197, 178, 141, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mc-install-action {
-  margin-top: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 40px;
-  padding: 0.55rem 0.95rem;
-  font-size: 0.78rem;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(216, 177, 99, 0.45);
+  border-radius: 999px;
+  background: rgba(216, 177, 99, 0.18);
+  color: #f4e3bd;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mc-install-action:active {
+  transform: scale(0.94);
 }
 
 .mc-install-close {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 28px;
-  height: 28px;
+  flex: none;
+  width: 26px;
+  height: 26px;
   display: grid;
   place-items: center;
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: rgba(240, 223, 182, 0.7);
+  color: rgba(240, 223, 182, 0.65);
   cursor: pointer;
+  padding: 0;
 }
 
 .mc-install-close:hover {
@@ -1357,10 +1370,6 @@
 }
 
 @media (max-width: 420px) {
-  .mc-install-drawer {
-    top: calc(64px + env(safe-area-inset-top, 0px));
-  }
-
   .mc-play-dock {
     margin-bottom: max(2.5rem, 8vh);
   }

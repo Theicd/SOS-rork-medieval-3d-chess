@@ -125,19 +125,18 @@ export function InstallPrompt({ visible }: InstallPromptProps) {
         </button>
 
         <div className="mc-install-panel">
+          <img alt="" src={iconUrl()} width={28} height={28} />
+          <span className="mc-display mc-install-title">Install</span>
+          <button type="button" className="mc-install-action" onClick={startInstall} aria-label="Install game">
+            <Download size={14} />
+          </button>
           <button
             type="button"
             className="mc-install-close"
             aria-label="Close"
             onClick={() => setOpen(false)}
           >
-            <X size={16} />
-          </button>
-          <img alt="" src={iconUrl()} width={44} height={44} />
-          <p className="mc-display mc-install-title">Install game</p>
-          <p className="mc-install-sub">Add to home screen — opens faster, works offline after one load.</p>
-          <button type="button" className="mc-btn mc-btn-primary mc-install-action" onClick={startInstall}>
-            <Download size={15} /> Install
+            <X size={14} />
           </button>
         </div>
       </div>
