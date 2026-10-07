@@ -1,0 +1,201 @@
+[
+  {
+    "era": "classic",
+    "url": "http://127.0.0.1:4178/?era=classic&review=1&probe=1&quality=high&scenario=capture",
+    "ready": true,
+    "stagedEra": "classic",
+    "stagedArena": "jungle",
+    "preset": "high",
+    "pieces": 29,
+    "skinned": 29,
+    "sculpted": [
+      "k",
+      "q",
+      "b",
+      "n",
+      "r",
+      "p"
+    ],
+    "missingKinds": [],
+    "rosterComplete": true,
+    "foreignSculpts": [],
+    "sourceCount": 12,
+    "contactsResolved": 1,
+    "beatTimeouts": 1,
+    "animationTimeouts": 0,
+    "frameErrors": 0,
+    "ply": 1,
+    "mean": 0.2974,
+    "p50": 0.2404,
+    "blackPct": 0,
+    "whitePct": 0.02,
+    "triangles": 1,
+    "errors": [],
+    "badRequests": [],
+    "checks": [
+      {
+        "label": "engine ready",
+        "ok": true,
+        "detail": "true"
+      },
+      {
+        "label": "staged requested era",
+        "ok": true,
+        "detail": "classic"
+      },
+      {
+        "label": "board filled",
+        "ok": true,
+        "detail": "29/29"
+      },
+      {
+        "label": "every figure rigged",
+        "ok": true,
+        "detail": "29/29"
+      },
+      {
+        "label": "no foreign sculpts",
+        "ok": true,
+        "detail": "all from this era"
+      },
+      {
+        "label": "roster covers every kind",
+        "ok": true,
+        "detail": "k,q,b,n,r,p"
+      },
+      {
+        "label": "capture resolved once",
+        "ok": true,
+        "detail": "1"
+      },
+      {
+        "label": "no animation timeouts",
+        "ok": true,
+        "detail": "0"
+      },
+      {
+        "label": "no frame errors",
+        "ok": true,
+        "detail": "0"
+      },
+      {
+        "label": "not a black screen",
+        "ok": true,
+        "detail": "mean=0.2974 black=0%"
+      },
+      {
+        "label": "no console errors",
+        "ok": true,
+        "detail": "0"
+      },
+      {
+        "label": "no failed requests",
+        "ok": true,
+        "detail": "0"
+      }
+    ],
+    "pass": true
+  },
+  {
+    "era": "egypt",
+    "url": "http://127.0.0.1:4178/?era=egypt&review=1&probe=1&quality=high&scenario=capture",
+    "ready": true,
+    "stagedEra": "egypt",
+    "stagedArena": "dawn",
+    "preset": "high",
+    "pieces": 29,
+    "skinned": 29,
+    "sculpted": [
+      "k",
+      "q",
+      "b",
+      "n",
+      "r",
+      "p"
+    ],
+    "missingKinds": [],
+    "rosterComplete": true,
+    "foreignSculpts": [],
+    "sourceCount": 12,
+    "contactsResolved": 1,
+    "beatTimeouts": 1,
+    "animationTimeouts": 0,
+    "frameErrors": 0,
+    "ply": 1,
+    "mean": 0.289,
+    "p50": 0.2384,
+    "blackPct": 0,
+    "whitePct": 0,
+    "triangles": 1,
+    "errors": [],
+    "badRequests": [],
+    "checks": [
+      {
+        "label": "engine ready",
+        "ok": true,
+        "detail": "true"
+      },
+      {
+        "label": "staged requested era",
+        "ok": true,
+        "detail": "egypt"
+      },
+      {
+        "label": "board filled",
+        "ok": true,
+        "detail": "29/29"
+      },
+      {
+        "label": "every figure rigged",
+        "ok": true,
+        "detail": "29/29"
+      },
+      {
+        "label": "no foreign sculpts",
+        "ok": true,
+        "detail": "all from this era"
+      },
+      {
+        "label": "roster covers every kind",
+        "ok": true,
+        "detail": "k,q,b,n,r,p"
+      },
+      {
+        "label": "capture resolved once",
+        "ok": true,
+        "detail": "1"
+      },
+      {
+        "label": "no animation timeouts",
+        "ok": true,
+        "detail": "0"
+      },
+      {
+        "label": "no frame errors",
+        "ok": true,
+        "detail": "0"
+      },
+      {
+        "label": "not a black screen",
+        "ok": true,
+        "detail": "mean=0.289 black=0%"
+      },
+      {
+        "label": "no console errors",
+        "ok": true,
+        "detail": "0"
+      },
+      {
+        "label": "no failed requests",
+        "ok": true,
+        "detail": "0"
+      },
+      {
+        "label": "beat timeouts no worse than baseline",
+        "ok": true,
+        "detail": "1 vs baseline 1"
+      }
+    ],
+    "pass": true
+  }
+]

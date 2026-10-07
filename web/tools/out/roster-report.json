@@ -1,0 +1,872 @@
+{
+  "rome": {
+    "k": {
+      "name": "Imperator",
+      "height": 1.899,
+      "files": {
+        "rigged": "/models/rome/k-rigged.glb",
+        "idle": "/models/rome/k-idle.glb",
+        "attack": "/models/rome/k-attack.glb",
+        "death": "/models/rome/k-death.glb",
+        "walk": "/models/rome/k-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 9355652,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 72692,
+          "duration": 4.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 77076,
+          "duration": 4.400000095367432,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 60232,
+          "duration": 3,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 71100,
+          "duration": 4.233333110809326,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "q": {
+      "name": "Vestal Oracle",
+      "height": 1.899,
+      "files": {
+        "rigged": "/models/rome/q-rigged.glb",
+        "idle": "/models/rome/q-idle.glb",
+        "attack": "/models/rome/q-attack.glb",
+        "death": "/models/rome/q-death.glb",
+        "walk": "/models/rome/q-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 9946288,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 71024,
+          "duration": 4.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 56868,
+          "duration": 2.700000047683716,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 51700,
+          "duration": 2.2666666507720947,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 72836,
+          "duration": 4.233333110809326,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "b": {
+      "name": "Augur",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/rome/b-rigged.glb",
+        "idle": "/models/rome/b-idle.glb",
+        "attack": "/models/rome/b-attack.glb",
+        "death": "/models/rome/b-death.glb",
+        "walk": "/models/rome/b-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 22,
+          "bytes": 10911164,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 41160,
+          "duration": 1.7000000476837158,
+          "channels": 66,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 72612,
+          "duration": 4.400000095367432,
+          "channels": 66,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 55536,
+          "duration": 3,
+          "channels": 66,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 34928,
+          "duration": 1.1333333253860474,
+          "channels": 66,
+          "fails": []
+        }
+      }
+    },
+    "r": {
+      "name": "Praetorian",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/rome/r-rigged.glb",
+        "idle": "/models/rome/r-idle.glb",
+        "attack": "/models/rome/r-attack.glb",
+        "death": "/models/rome/r-death.glb",
+        "walk": "/models/rome/r-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 10818436,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43312,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 45180,
+          "duration": 1.8666666746139526,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 59684,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 103000,
+          "duration": 6.5333333015441895,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "p": {
+      "name": "Legionary",
+      "height": 1.894,
+      "files": {
+        "rigged": "/models/rome/p-rigged.glb",
+        "idle": "/models/rome/p-idle.glb",
+        "attack": "/models/rome/p-attack.glb",
+        "death": "/models/rome/p-death.glb",
+        "walk": "/models/rome/p-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 11348996,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43008,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 60652,
+          "duration": 3.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 55828,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 36768,
+          "duration": 1.1333333253860474,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "n": {
+      "name": "Eques",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/rome/n-rigged.glb",
+        "idle": "/models/rome/n-idle.glb",
+        "attack": "/models/rome/n-attack.glb",
+        "death": "/models/rome/n-death.glb",
+        "walk": "/models/rome/n-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 9777696,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43048,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 46672,
+          "duration": 1.8666666746139526,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 59432,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 102752,
+          "duration": 6.5333333015441895,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    }
+  },
+  "sengoku": {
+    "k": {
+      "name": "Daimyo",
+      "height": 1.899,
+      "files": {
+        "rigged": "/models/sengoku/k-rigged.glb",
+        "idle": "/models/sengoku/k-idle.glb",
+        "attack": "/models/sengoku/k-attack.glb",
+        "death": "/models/sengoku/k-death.glb",
+        "walk": "/models/sengoku/k-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 11756356,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 72708,
+          "duration": 4.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 77088,
+          "duration": 4.400000095367432,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 60244,
+          "duration": 3,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 71116,
+          "duration": 4.233333110809326,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "q": {
+      "name": "Onna-bugeisha",
+      "height": 1.899,
+      "files": {
+        "rigged": "/models/sengoku/q-rigged.glb",
+        "idle": "/models/sengoku/q-idle.glb",
+        "attack": "/models/sengoku/q-attack.glb",
+        "death": "/models/sengoku/q-death.glb",
+        "walk": "/models/sengoku/q-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 10621120,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 72836,
+          "duration": 4.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 56784,
+          "duration": 2.700000047683716,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 49496,
+          "duration": 2.2666666507720947,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 71244,
+          "duration": 4.233333110809326,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "b": {
+      "name": "Sohei Monk",
+      "height": 1.899,
+      "files": {
+        "rigged": "/models/sengoku/b-rigged.glb",
+        "idle": "/models/sengoku/b-idle.glb",
+        "attack": "/models/sengoku/b-attack.glb",
+        "death": "/models/sengoku/b-death.glb",
+        "walk": "/models/sengoku/b-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 8305448,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43176,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 78784,
+          "duration": 4.400000095367432,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 60380,
+          "duration": 3,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 36936,
+          "duration": 1.1333333253860474,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "r": {
+      "name": "Castle Guard",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/sengoku/r-rigged.glb",
+        "idle": "/models/sengoku/r-idle.glb",
+        "attack": "/models/sengoku/r-attack.glb",
+        "death": "/models/sengoku/r-death.glb",
+        "walk": "/models/sengoku/r-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 10226472,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43220,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 46828,
+          "duration": 1.8666666746139526,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 58712,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 102916,
+          "duration": 6.5333333015441895,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "n": {
+      "name": "Samurai Cavalry",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/sengoku/n-rigged.glb",
+        "idle": "/models/sengoku/n-idle.glb",
+        "attack": "/models/sengoku/n-attack.glb",
+        "death": "/models/sengoku/n-death.glb",
+        "walk": "/models/sengoku/n-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 10984572,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43188,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 45068,
+          "duration": 1.8666666746139526,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 60468,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 102888,
+          "duration": 6.5333333015441895,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "p": {
+      "name": "Ashigaru",
+      "height": 1.894,
+      "files": {
+        "rigged": "/models/sengoku/p-rigged.glb",
+        "idle": "/models/sengoku/p-idle.glb",
+        "attack": "/models/sengoku/p-attack.glb",
+        "death": "/models/sengoku/p-death.glb",
+        "walk": "/models/sengoku/p-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 11153500,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43096,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 60736,
+          "duration": 3.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 62744,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 36864,
+          "duration": 1.1333333253860474,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    }
+  },
+  "egypt": {
+    "k": {
+      "name": "Pharaoh",
+      "height": 1.899,
+      "files": {
+        "rigged": "/models/egypt/k-rigged.glb",
+        "idle": "/models/egypt/k-idle.glb",
+        "attack": "/models/egypt/k-attack.glb",
+        "death": "/models/egypt/k-death.glb",
+        "walk": "/models/egypt/k-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 11040708,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 70848,
+          "duration": 4.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 77136,
+          "duration": 4.400000095367432,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 57472,
+          "duration": 3,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 75676,
+          "duration": 4.233333110809326,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "q": {
+      "name": "Great Royal Wife",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/egypt/q-rigged.glb",
+        "idle": "/models/egypt/q-idle.glb",
+        "attack": "/models/egypt/q-attack.glb",
+        "death": "/models/egypt/q-death.glb",
+        "walk": "/models/egypt/q-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 11424368,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 72888,
+          "duration": 4.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 56852,
+          "duration": 2.700000047683716,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 49552,
+          "duration": 2.2666666507720947,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 71304,
+          "duration": 4.233333110809326,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "b": {
+      "name": "High Priest of Amun",
+      "height": 1.899,
+      "files": {
+        "rigged": "/models/egypt/b-rigged.glb",
+        "idle": "/models/egypt/b-idle.glb",
+        "attack": "/models/egypt/b-attack.glb",
+        "death": "/models/egypt/b-death.glb",
+        "walk": "/models/egypt/b-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 9134776,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43080,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 77132,
+          "duration": 4.400000095367432,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 58876,
+          "duration": 3,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 36848,
+          "duration": 1.1333333253860474,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "r": {
+      "name": "Temple Guardian",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/egypt/r-rigged.glb",
+        "idle": "/models/egypt/r-idle.glb",
+        "attack": "/models/egypt/r-attack.glb",
+        "death": "/models/egypt/r-death.glb",
+        "walk": "/models/egypt/r-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 11283032,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43212,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 45964,
+          "duration": 1.8666666746139526,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 63156,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 102912,
+          "duration": 6.5333333015441895,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "n": {
+      "name": "Charioteer",
+      "height": 1.898,
+      "files": {
+        "rigged": "/models/egypt/n-rigged.glb",
+        "idle": "/models/egypt/n-idle.glb",
+        "attack": "/models/egypt/n-attack.glb",
+        "death": "/models/egypt/n-death.glb",
+        "walk": "/models/egypt/n-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 11328668,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43268,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 46028,
+          "duration": 1.8666666746139526,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 65884,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 105308,
+          "duration": 6.5333333015441895,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    },
+    "p": {
+      "name": "Medjay Infantry",
+      "height": 1.897,
+      "files": {
+        "rigged": "/models/egypt/p-rigged.glb",
+        "idle": "/models/egypt/p-idle.glb",
+        "attack": "/models/egypt/p-attack.glb",
+        "death": "/models/egypt/p-death.glb",
+        "walk": "/models/egypt/p-walk.glb"
+      },
+      "checks": {
+        "rigged": {
+          "pass": true,
+          "skins": 1,
+          "joints": 24,
+          "bytes": 10489632,
+          "fails": []
+        },
+        "idle": {
+          "pass": true,
+          "bytes": 43148,
+          "duration": 1.7000000476837158,
+          "channels": 72,
+          "fails": []
+        },
+        "attack": {
+          "pass": true,
+          "bytes": 57936,
+          "duration": 3.0333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "death": {
+          "pass": true,
+          "bytes": 59536,
+          "duration": 2.5333333015441895,
+          "channels": 72,
+          "fails": []
+        },
+        "walk": {
+          "pass": true,
+          "bytes": 36912,
+          "duration": 1.1333333253860474,
+          "channels": 72,
+          "fails": []
+        }
+      }
+    }
+  }
+}
