@@ -3,12 +3,8 @@
  * VISUAL performance of the beat, not merely the sum of its phase windows.
  *
  * Before this was fixed the watchdog fired on every healthy capture on all four
- * QA surfaces. Measured on the dist build at quality=high (RTX 3090):
- *   melee pawn capture  5047ms visual vs 3960ms budget
- *   queen spell capture 8391ms visual vs 4520ms budget
- * Both beats completed normally - phases advanced to resolve/done, contact
- * resolved exactly once and the FEN advanced - so the timeouts were false
- * positives caused by an under-sized ceiling.
+ * QA surfaces. Budgets track the authored visual wall time of the duel
+ * (camera frame + clash exchange + finish), not only the phase-window sum.
  *
  * These tests pin the contract that keeps the watchdog a HANG detector:
  *  - every rank's budget clears its measured visual cost with headroom,
@@ -20,9 +16,9 @@ import { describe, expect, it } from "vitest";
 import { specForCapture } from "../core/combatMachine";
 import type { MoveEvent, PieceKind } from "../core/types";
 
-/** Worst measured visual wall time per branch, in seconds. */
-const MEASURED_MELEE_S = 5.047;
-const MEASURED_RANGED_S = 8.391;
+/** Worst estimated visual wall time per branch after duel framing, in seconds. */
+const MEASURED_MELEE_S = 8.6;
+const MEASURED_RANGED_S = 9.3;
 
 /** GameController's turn-loop ceiling. The scene watchdog must fire first. */
 const CONTROLLER_CEILING_S = 12;

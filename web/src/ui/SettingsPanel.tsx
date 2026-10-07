@@ -250,7 +250,7 @@ export function SettingsPanel({
 
         <Toggle
           label="Battle capture cinematics"
-          note="Camera punch, strike, sparks and crumble — under 1.5s"
+          note="Camera focuses the scrap, fighters exchange blows, then the kill"
           value={settings.captureCinematics}
           onChange={(value) => onChange({ ...settings, captureCinematics: value })}
         />

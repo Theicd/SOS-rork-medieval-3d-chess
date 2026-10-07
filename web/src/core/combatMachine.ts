@@ -164,13 +164,12 @@ export function specForCapture(event: MoveEvent, ply: number): CombatSpec | null
     // Watchdog ceiling for the VISUAL performance of this beat, not the sum of
     // its phase windows. The windows-proportional term keeps heavier ranks
     // longer; the constant covers the authored visual tail the phase model does
-    // not represent (turn-to-face, spell gather, projectile flight, slay,
-    // banish and the closing glide). Ranged beats pay a much larger tail, so
-    // they carry a larger constant. Measured on the dist build at quality=high:
-    // melee 5047ms and ranged 8391ms, both of which completed normally.
-    // Sized with headroom above those figures and kept below the controller's
+    // not represent (battle-camera dolly, exchanged blows, spell gather,
+    // projectile flight, slay, banish and the closing glide). Ranged beats pay
+    // a longer tail, so they carry a larger constant. Sized with headroom for
+    // the duel framing + multi-clash melee, and kept below the controller's
     // 12s turn-loop ceiling so this remains the first line of defence.
-    budget: total * 2 + (ranged ? 6.6 : 4),
+    budget: total * 2 + (ranged ? 7.4 : 6.9),
   };
 }
 

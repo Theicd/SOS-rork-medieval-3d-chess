@@ -1841,11 +1841,109 @@ export class SceneEngine {
     piece.setSquash(0);
   }
 
+  /** Side-on close-up that keeps both fighters in frame over the contested square. */
+  private battleFocusShot(focus: THREE.Vector3, approach: THREE.Vector3): CameraShot {
+    const dir = approach.clone().setY(0);
+    if (dir.lengthSq() < 1e-6) dir.set(0, 0, 1);
+    dir.normalize();
+    const side = new THREE.Vector3(-dir.z, 0, dir.x);
+    const position = focus
+      .clone()
+      .add(dir.clone().multiplyScalar(-2.15))
+      .add(side.multiplyScalar(2.55))
+      .add(new THREE.Vector3(0, 2.4, 0));
+    return { position, target: focus.clone().setY(0.55) };
+  }
+
+  /** Dolly into the fight; returns the shot to restore when the beat ends. */
+  private async frameBattle(focus: THREE.Vector3, approach: THREE.Vector3, duration = 0.58): Promise<CameraShot> {
+    const previous: CameraShot = {
+      position: this.camera.position.clone(),
+      target: this.controls.target.clone(),
+    };
+    this.postfx.setCinematic(true, Math.max(3.1, this.camera.position.distanceTo(focus) * 0.42));
+    await this.moveCameraTo(this.battleFocusShot(focus, approach), duration);
+    return previous;
+  }
+
+  private async releaseBattleFrame(previous: CameraShot, duration = 0.5): Promise<void> {
+    this.postfx.setCinematic(false);
+    await this.moveCameraTo(previous, duration);
+  }
+
+  /** Non-lethal clash: strike lands, sparks fly, the target recoils — nobody dies. */
+  private async duelClash(
+    striker: PieceView,
+    target: PieceView,
+    toward: THREE.Vector3,
+    impactAt: THREE.Vector3,
+    square: SquareId,
+    power: number,
+    style: { swing: number; heft: number; slash: { size: number; color: number } | null },
+  ): Promise<void> {
+    const settings = QUALITY_SETTINGS[this.preset];
+    striker.faceTowards(target.container.position);
+    target.faceTowards(striker.container.position);
+
+    const strike = striker.hasClip("attack") ? striker.playAttack() : null;
+    if (style.swing > 0) {
+      const lead = strike && strike.duration > 0 ? Math.max(0, strike.impact - 0.16) : 0.04;
+      audio.bladeWhoosh({
+        pan: this.stereoPan(striker.container.position),
+        volume: style.swing * 0.85,
+        weight: style.heft * 0.75,
+        delay: lead,
+      });
+    }
+    if (strike && strike.duration > 0) await wait(strike.impact);
+    else await this.lunge(striker, toward, style.heft * 0.7);
+
+    target.takeHit();
+    audio.play("capture", Math.min(0.72, 0.42 * power));
+    this.strikeImpact(square, Math.min(0.9, power * 0.55));
+    this.effects.spawnFlash(impactAt, Math.min(2.6, 1.35 * power), 0.16);
+    this.effects.spawnBurst(impactAt, 0xffc978, Math.round(settings.captureParticles * 0.45 * power), {
+      speed: 2.6,
+      life: 0.55,
+    });
+    this.shake.add(Math.min(0.5, 0.28 * power));
+    if (style.slash) {
+      void spawnSlash(this.scene, this.tweens, impactAt, {
+        color: style.slash.color,
+        size: style.slash.size * 0.78,
+        tilt: -0.4 - this.strikeRng.next() * 0.4,
+      });
+    }
+
+    const away = target.container.position.clone().sub(striker.container.position).setY(0);
+    if (away.lengthSq() < 1e-6) away.copy(toward);
+    away.normalize();
+    await this.clashRecoil(target, away, TILE * 0.11);
+
+    if (!strike || strike.duration === 0) this.recover(striker, toward, style.heft * 0.7);
+    else await wait(Math.min(0.26, Math.max(0.1, strike.duration - strike.impact)));
+  }
+
+  /** Brief shove off the blow so exchanged hits read as force, not a light tap. */
+  private async clashRecoil(piece: PieceView, away: THREE.Vector3, amount: number): Promise<void> {
+    await this.tweens.to({
+      duration: 0.2,
+      easing: Ease.outCubic,
+      onUpdate: (t) => {
+        const kick = Math.sin(t * Math.PI) * amount;
+        piece.runtime.position.x = away.x * kick;
+        piece.runtime.position.z = away.z * kick;
+        piece.setStrikeTilt(-0.14 * Math.sin(t * Math.PI));
+      },
+    });
+    piece.runtime.position.set(0, 0, 0);
+    piece.setStrikeTilt(0);
+  }
+
   /**
-   * The hand-to-hand battle beat: charge, square up, strike, crumble. How hard
-   * it hits is read out of {@link STRIKES} for the attacking rank, so the same
-   * choreography carries a footsoldier's stab and a royal execution without
-   * either one borrowing the other's weight.
+   * The hand-to-hand battle beat: frame the scrap, charge, exchange blows, then
+   * the finishing strike and crumble. How hard it hits is read out of
+   * {@link STRIKES} for the attacking rank.
    */
   private async playCaptureCinematic(
     attacker: PieceView,
@@ -1863,10 +1961,14 @@ export class SceneEngine {
     const blow = victimSpot.clone().sub(standoff).setY(0);
     if (blow.lengthSq() < 1e-6) blow.copy(direction);
     blow.normalize();
+    const focus = standoff.clone().lerp(victimSpot, 0.55).setY(0.35);
+    const clashStyle = { swing: profile.swing, heft: profile.heft, slash: profile.slash };
+
+    const priorShot = await this.frameBattle(focus, direction);
 
     const originalFov = this.camera.fov;
     void this.tweens.to({
-      duration: 0.22,
+      duration: 0.28,
       easing: Ease.outCubic,
       onUpdate: (t) => {
         this.camera.fov = originalFov - profile.zoom * t;
@@ -1877,28 +1979,39 @@ export class SceneEngine {
     // Both fighters square up: the attacker charges in, the defender turns to
     // meet its killer so the blow never lands on the back of a head.
     await Promise.all([
-      // Pressing forward into the blow: the same march, a quicker cadence.
       this.glide(attacker, from, standoff, attacker.kind === "n", profile.charge),
       victim.turnTowards(standoff, this.tweens, 0.3),
     ]);
     attacker.faceTowards(victimSpot);
-    // Arrival beat: the march has stopped and the figure is squared up on its
-    // target. A held breath here is what makes the blow read as its own action
-    // rather than the tail of the walk. The heavier the rank, the longer it
-    // stands there before it commits.
-    await wait(profile.wind);
+    await wait(profile.wind + 0.08);
 
-    // Sentence before execution: the crown drops a column of light on the
-    // condemned and the hall is told what is coming.
+    // Probe and counter before the kill — pawns/knights trade once; heavier
+    // ranks trade twice so the scrap has a back-and-forth the player can read.
+    const clashes = attacker.kind === "p" || attacker.kind === "n" ? 1 : 2;
+    for (let i = 0; i < clashes; i += 1) {
+      const impact = victimSpot.clone().setY(0.55);
+      if (i % 2 === 0) {
+        await this.duelClash(attacker, victim, blow, impact, strikeSquare, profile.power * 0.62, clashStyle);
+      } else {
+        const counter = standoff.clone().setY(0.55);
+        const reply = standoff.clone().sub(victimSpot).setY(0);
+        if (reply.lengthSq() < 1e-6) reply.copy(blow).multiplyScalar(-1);
+        reply.normalize();
+        await this.duelClash(victim, attacker, reply, counter, strikeSquare, profile.power * 0.55, {
+          swing: Math.max(0.35, profile.swing * 0.75),
+          heft: profile.heft * 0.65,
+          slash: profile.slash,
+        });
+      }
+      await wait(0.16 + i * 0.04);
+    }
+
+    // Sentence before the finishing blow: crown only.
     if (profile.pillar) await this.passSentence(victim, victimSpot, profile.pillar, settings.postFx);
 
-    // Strike: the skeletal attack clip when the rig carries one, otherwise a
-    // wind-up and lunge driven off the runtime node so the board anchor stays
-    // put. Note this asks for the clip itself, not merely for a rig — a figure
-    // whose strike failed to download must still visibly attack.
+    // Killing strike — full weight, then the body goes down.
     const strike = attacker.hasClip("attack") ? attacker.playAttack() : null;
     if (profile.swing > 0) {
-      // The weapon is heard coming round just before it arrives.
       const lead = strike && strike.duration > 0 ? Math.max(0, strike.impact - 0.18) : 0.05;
       audio.bladeWhoosh({
         pan: this.stereoPan(standoff),
@@ -1913,7 +2026,6 @@ export class SceneEngine {
     const impact = victimSpot.clone().setY(0.55);
     const power = profile.power;
     audio.play("capture", Math.min(1, 0.85 * power));
-    // The board itself is capped: past a point the tiles stop reading as stone.
     this.strikeImpact(strikeSquare, Math.min(1.5, power));
     this.effects.spawnFlash(impact, Math.min(4.4, 2.2 * power), 0.24);
     this.effects.spawnBurst(impact, 0xffc978, Math.round(settings.captureParticles * power), {
@@ -1922,7 +2034,6 @@ export class SceneEngine {
     });
     this.shake.add(Math.min(1, 0.55 * power));
 
-    // Steel: the cut hangs in the air for a couple of frames after the blade.
     if (profile.slash) {
       void spawnSlash(this.scene, this.tweens, impact, {
         color: profile.slash.color,
@@ -1931,7 +2042,6 @@ export class SceneEngine {
       });
     }
 
-    // Weight: a blow that carries into the floor sends a wave across the stone.
     if (profile.wave) {
       audio.groundSlam({ pan: this.stereoPan(victimSpot), volume: Math.min(1, power * 0.6) });
       void spawnGroundWave(this.scene, this.tweens, victimSpot, {
@@ -1953,7 +2063,6 @@ export class SceneEngine {
       });
     }
 
-    // A charge does not stop where it strikes: dust keeps going past the body.
     if (profile.wake) {
       this.effects.spawnSmoke(standoff.clone().setY(BOARD_TOP + 0.12), {
         count: Math.max(3, Math.round(settings.captureParticles * 0.2)),
@@ -1969,16 +2078,12 @@ export class SceneEngine {
       });
     }
 
-    // Hitstop: on a heavy blow the whole beat holds for a frame or two on
-    // contact, which is what makes the hit feel like it connected with mass.
-    if (profile.hold > 0) await wait(profile.hold);
+    if (profile.hold > 0) await wait(profile.hold + 0.04);
 
     if (!strike || strike.duration === 0) this.recover(attacker, direction, profile.heft);
 
-    // The hall answers a beat later.
     if (profile.aftershock > 0) void this.aftershock(strikeSquare, profile.aftershock);
 
-    // The defender goes down while the attacker finishes following through.
     const recovery = strike ? Math.min(0.45, Math.max(0, strike.duration - strike.impact)) : 0.18;
     await Promise.all([this.slay(victim, blow), wait(recovery)]);
 
@@ -1991,11 +2096,11 @@ export class SceneEngine {
       },
     });
 
-    // The corpse is thrown clear in smoke as the victor takes the square.
+    // Pull the lens back while the corpse clears and the victor takes the square.
     await Promise.all([
       this.banish(victim, blow),
-      // The last stride onto the square it has just cleared.
       this.glide(attacker, standoff, to, false, 1.5),
+      this.releaseBattleFrame(priorShot, 0.55),
     ]);
     audio.play("place", 0.5);
   }
@@ -2077,9 +2182,12 @@ export class SceneEngine {
     blow.normalize();
 
     const spell = spellProfile(attacker.kind);
+    const focus = from.clone().lerp(victimSpot, 0.55).setY(0.4);
+    const priorShot = await this.frameBattle(focus, blow, 0.62);
+
     const originalFov = this.camera.fov;
     void this.tweens.to({
-      duration: 0.28,
+      duration: 0.32,
       easing: Ease.outCubic,
       onUpdate: (t) => {
         this.camera.fov = originalFov - spell.zoom * t;
@@ -2114,8 +2222,15 @@ export class SceneEngine {
       const leaders: Promise<void>[] = [];
       for (let i = 0; i < spell.bolts - 1; i += 1) {
         leaders.push(this.throwFireball(attacker, impact, { size: 0.34, delay: i * 0.11, leader: true }));
+        // Mid-volley flinch so the target is not standing still under fire.
+        if (i === 0) {
+          void wait(0.2).then(() => {
+            victim.takeHit();
+            this.shake.add(0.18);
+          });
+        }
       }
-      await wait(0.18);
+      await wait(0.22);
       await this.throwFireball(attacker, impact, { size: 0.64 });
       await Promise.all(leaders);
     } else {
@@ -2136,7 +2251,7 @@ export class SceneEngine {
     });
 
     // The body is cleared off the board, and only then is the square walked to.
-    await this.banish(victim, blow);
+    await Promise.all([this.banish(victim, blow), this.releaseBattleFrame(priorShot, 0.55)]);
     if (cast) attacker.playIdle(0.2);
     await this.glide(attacker, from, to, false, 1.15);
     audio.play("place", 0.5);
