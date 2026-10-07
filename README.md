@@ -1,4 +1,17 @@
-# King's Gambit — Medieval 3D Chess
+# King's Gambit — Medieval 3D Chess (SOS hosting)
+
+Playable build: **https://theicd.github.io/SOS-rork-medieval-3d-chess/**
+
+## Credit / source
+
+This repository is a **hosted SOS fork** of the original game:
+
+**Original project:** [ade5791/rork-medieval-3d-chess](https://github.com/ade5791/rork-medieval-3d-chess)  
+**Author / upstream:** [ade5791](https://github.com/ade5791)
+
+All game art, engine, and design credit belongs to the original authors. SOS changes here are limited to one-tap Play matchmaking, install/PWA UX, and GitHub Pages hosting. The MIT license from upstream is preserved in `LICENSE`.
+
+---
 
 A cinematic 3D chess game in the browser. Two rival civilisations — a medieval European
 **Ivory Kingdom** and a Mesoamerican **Sun Empire** — face each other as sculpted, rigged

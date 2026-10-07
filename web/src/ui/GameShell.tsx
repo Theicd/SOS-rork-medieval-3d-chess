@@ -102,8 +102,6 @@ export function GameShell() {
   const [searching, setSearching] = useState(false);
   const [menuStatus, setMenuStatus] = useState<string | null>(null);
   const [challenge, setChallenge] = useState<{ name: string } | null>(null);
-  const [canInstall, setCanInstall] = useState(false);
-  const [installOpenSignal, setInstallOpenSignal] = useState(0);
 
   // ------------------------------------------------------------ boot the scene
   useEffect(() => {
@@ -651,8 +649,6 @@ export function GameShell() {
           <MainMenu
             onPlay={handleQuickPlay}
             onOpenSettings={() => setShowSettings(true)}
-            onInstall={() => setInstallOpenSignal((n) => n + 1)}
-            canInstall={canInstall}
             attract={attract}
             onInteract={stopAttract}
             searching={searching}
@@ -660,11 +656,7 @@ export function GameShell() {
           />
         ) : null}
 
-        <InstallPrompt
-          visible={phase === "menu" && !introPlaying && !showSettings}
-          onAvailabilityChange={setCanInstall}
-          openSignal={installOpenSignal}
-        />
+        <InstallPrompt visible={phase === "menu" && !introPlaying && !showSettings} />
 
         {challenge ? (
           <div className="pointer-events-auto absolute inset-0 z-40 flex items-center justify-center bg-black/55 px-5">

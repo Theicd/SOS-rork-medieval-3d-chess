@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Download, X } from "lucide-react";
 
 interface InstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -37,24 +38,19 @@ export function registerChessServiceWorker(): void {
 }
 
 interface InstallPromptProps {
-  /** When false, hide the floating card (e.g. during a match). */
+  /** Home screen only — hide during a match. */
   visible: boolean;
-  /** Optional: expose whether install is available (for a top-bar download button). */
-  onAvailabilityChange?: (available: boolean) => void;
-  /** Imperative open from the top-bar download gear. */
-  openSignal?: number;
 }
 
 /**
- * Kart-style install UX: a short floating card on the home screen, plus a
- * confirmation dialog (native prompt on Chromium, Share steps on iOS).
+ * Left-edge install bookmark: slides open from the left on the home screen,
+ * auto-closes after 5s, and leaves a tab head you can tap to reopen.
  */
-export function InstallPrompt({ visible, onAvailabilityChange, openSignal = 0 }: InstallPromptProps) {
+export function InstallPrompt({ visible }: InstallPromptProps) {
   const [deferred, setDeferred] = useState<InstallPromptEvent | null>(null);
-  const [available, setAvailable] = useState(() => isIOS() && !isStandalone());
-  const [showCard, setShowCard] = useState(false);
-  const [cardGone, setCardGone] = useState(false);
+  const [open, setOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [installed, setInstalled] = useState(() => isStandalone());
 
   useEffect(() => {
     registerChessServiceWorker();
@@ -62,21 +58,18 @@ export function InstallPrompt({ visible, onAvailabilityChange, openSignal = 0 }:
 
   useEffect(() => {
     if (isStandalone()) {
-      setAvailable(false);
-      onAvailabilityChange?.(false);
+      setInstalled(true);
       return;
     }
-
     const onPrompt = (e: Event): void => {
       e.preventDefault();
       setDeferred(e as InstallPromptEvent);
-      setAvailable(true);
     };
     const onInstalled = (): void => {
-      setAvailable(false);
+      setInstalled(true);
       setDeferred(null);
       setDialogOpen(false);
-      setShowCard(false);
+      setOpen(false);
     };
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
@@ -84,27 +77,18 @@ export function InstallPrompt({ visible, onAvailabilityChange, openSignal = 0 }:
       window.removeEventListener("beforeinstallprompt", onPrompt);
       window.removeEventListener("appinstalled", onInstalled);
     };
-  }, [onAvailabilityChange]);
+  }, []);
 
+  // Auto-open once when the home screen is shown, then tuck back to the tab.
   useEffect(() => {
-    onAvailabilityChange?.(available && !isStandalone());
-  }, [available, onAvailabilityChange]);
-
-  // Show the floating card briefly when install becomes available on the menu.
-  useEffect(() => {
-    if (!visible || !available || isStandalone()) {
-      setShowCard(false);
+    if (!visible || installed) {
+      setOpen(false);
       return;
     }
-    setShowCard(true);
-    setCardGone(false);
-    const fade = window.setTimeout(() => setCardGone(true), 5000);
-    const hide = window.setTimeout(() => setShowCard(false), 5600);
-    return () => {
-      clearTimeout(fade);
-      clearTimeout(hide);
-    };
-  }, [visible, available]);
+    setOpen(true);
+    const close = window.setTimeout(() => setOpen(false), 5000);
+    return () => clearTimeout(close);
+  }, [visible, installed]);
 
   const runPrompt = useCallback(async () => {
     if (!deferred) return;
@@ -112,38 +96,51 @@ export function InstallPrompt({ visible, onAvailabilityChange, openSignal = 0 }:
     setDeferred(null);
     await event.prompt().catch(() => {});
     const choice = await event.userChoice.catch(() => null);
-    if (choice?.outcome === "accepted") setAvailable(false);
+    if (choice?.outcome === "accepted") setInstalled(true);
   }, [deferred]);
 
-  const openDialog = useCallback(() => {
-    if (!available || isStandalone()) return;
-    setDialogOpen(true);
-  }, [available]);
+  const startInstall = useCallback(() => {
+    if (deferred) void runPrompt();
+    else setDialogOpen(true);
+  }, [deferred, runPrompt]);
 
-  useEffect(() => {
-    if (openSignal > 0) openDialog();
-  }, [openSignal, openDialog]);
-
-  if (isStandalone()) return null;
+  if (installed || !visible) return null;
 
   return (
     <>
-      {showCard && visible ? (
+      <div
+        className={`mc-install-drawer${open ? " open" : ""}`}
+        onPointerDown={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
-          className={`mc-install-card${cardGone ? " gone" : ""}`}
-          onClick={() => {
-            if (deferred) void runPrompt();
-            else openDialog();
-          }}
+          className="mc-install-tab"
+          title="Install game"
+          aria-label="Install game"
+          aria-expanded={open}
+          onClick={() => setOpen(true)}
         >
-          <img alt="" src={iconUrl()} width={40} height={40} />
-          <span>
-            Install game
-            <small>Add to home screen</small>
-          </span>
+          <Download size={16} strokeWidth={2.4} />
+          <span className="mc-install-tab-txt">Install</span>
         </button>
-      ) : null}
+
+        <div className="mc-install-panel">
+          <button
+            type="button"
+            className="mc-install-close"
+            aria-label="Close"
+            onClick={() => setOpen(false)}
+          >
+            <X size={16} />
+          </button>
+          <img alt="" src={iconUrl()} width={44} height={44} />
+          <p className="mc-display mc-install-title">Install game</p>
+          <p className="mc-install-sub">Add to home screen — opens faster, works offline after one load.</p>
+          <button type="button" className="mc-btn mc-btn-primary mc-install-action" onClick={startInstall}>
+            <Download size={15} /> Install
+          </button>
+        </div>
+      </div>
 
       {dialogOpen ? (
         <div
@@ -161,28 +158,7 @@ export function InstallPrompt({ visible, onAvailabilityChange, openSignal = 0 }:
               <li>After one online load, reopens from device cache</li>
               <li>Playable offline once the hall has finished loading once</li>
             </ul>
-            {deferred ? (
-              <>
-                <p>
-                  Tap <b>Install</b> to confirm.
-                </p>
-                <div className="mc-install-dlg-row">
-                  <button type="button" className="mc-btn" onClick={() => setDialogOpen(false)}>
-                    Not now
-                  </button>
-                  <button
-                    type="button"
-                    className="mc-btn mc-btn-primary"
-                    onClick={() => {
-                      setDialogOpen(false);
-                      void runPrompt();
-                    }}
-                  >
-                    Install
-                  </button>
-                </div>
-              </>
-            ) : (
+            {isIOS() ? (
               <>
                 <p>
                   Tap <b>Share</b> <span aria-hidden>⬆︎</span> in Safari, then <b>Add to Home Screen</b>.
@@ -193,6 +169,22 @@ export function InstallPrompt({ visible, onAvailabilityChange, openSignal = 0 }:
                   </button>
                 </div>
               </>
+            ) : (
+              <div className="mc-install-dlg-row">
+                <button type="button" className="mc-btn" onClick={() => setDialogOpen(false)}>
+                  Not now
+                </button>
+                <button
+                  type="button"
+                  className="mc-btn mc-btn-primary"
+                  onClick={() => {
+                    setDialogOpen(false);
+                    if (deferred) void runPrompt();
+                  }}
+                >
+                  Install
+                </button>
+              </div>
             )}
           </div>
         </div>
