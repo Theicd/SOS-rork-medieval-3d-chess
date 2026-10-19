@@ -161,6 +161,7 @@ export class SosChessNet extends Emitter<ChessNetEvents> {
     if (this.disposed) return;
     if (!SosChessNet.supported()) {
       this.setPhase("ai", "Playing offline");
+      notifySosPlaying();
       this.emit("startAi", { color: "w" });
       return;
     }
@@ -417,6 +418,7 @@ export class SosChessNet extends Emitter<ChessNetEvents> {
       window.setTimeout(() => {
         if (this.disposed || this.phase !== "lobby") return;
         this.setPhase("ai", "Playing the computer — open for a challenger");
+        notifySosPlaying();
         this.emit("startAi", { color: this.myColor });
         this.announce();
       }, LOBBY_MS),
@@ -606,6 +608,7 @@ export class SosChessNet extends Emitter<ChessNetEvents> {
       this.role = peer.hostSide ? "host" : "client";
       this.peer = peer;
       this.setPhase("pvp", `Playing ${this.opponentName}`);
+      notifySosPlaying();
       this.emit("startPvp", { color: this.myColor, opponentName: this.opponentName });
       return;
     }
@@ -657,6 +660,7 @@ export class SosChessNet extends Emitter<ChessNetEvents> {
     clearInterval(this.heartbeat);
     this.send(peer, { t: "start", color: "b", name: readName() });
     this.setPhase("pvp", `Playing ${peer.name}`);
+    notifySosPlaying();
     this.emit("startPvp", { color: "w", opponentName: peer.name });
   }
 
@@ -740,10 +744,27 @@ export class SosChessNet extends Emitter<ChessNetEvents> {
   }
 }
 
+function cleanChessName(value: string | null | undefined): string {
+  return String(value || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 20);
+}
+
 function readName(): string {
   try {
-    return localStorage.getItem("kg.online.name")?.trim().slice(0, 20) || "Challenger";
+    const fromQuery = cleanChessName(new URLSearchParams(location.search).get("name"));
+    if (fromQuery) return fromQuery;
+    return cleanChessName(localStorage.getItem("kg.online.name")) || "Challenger";
   } catch {
     return "Challenger";
+  }
+}
+
+/** Tells the SOS panel a match has started, so the fullscreen control appears. */
+function notifySosPlaying(): void {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: "chess-playing" }, "*");
+    }
+  } catch {
+    /* opened on its own */
   }
 }
